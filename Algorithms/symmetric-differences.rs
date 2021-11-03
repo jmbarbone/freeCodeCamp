@@ -1,20 +1,11 @@
-#!/usr/bin/env rustc
 
 fn main() {
-    let x: Vec<Vec<i32>> = vec![vec![1, 2, 3], vec![5, 2, 1, 4]];
-    assert_eq!(sym_diff(&x), vec![3, 4, 5]);
+    assert_eq!(sym_diff(&vec![vec![1, 2, 3],    vec![5, 2, 1, 4]]),    vec![3, 4, 5]);
+    assert_eq!(sym_diff(&vec![vec![1, 2, 3, 3], vec![5, 2, 1, 4]]),    vec![3, 4, 5]);
+    assert_eq!(sym_diff(&vec![vec![1, 2, 3],    vec![5, 2, 1, 4, 5]]), vec![3, 4, 5]);
 
-    let x: Vec<Vec<i32>> = vec![vec![1, 2, 3, 3], vec![5, 2, 1, 4]];
-    assert_eq!(sym_diff(&x), vec![3, 4, 5]);
-
-    let x: Vec<Vec<i32>> = vec![vec![1, 2, 3], vec![5, 2, 1, 4, 5]];
-    assert_eq!(sym_diff(&x), vec![3, 4, 5]);
-
-    let x: Vec<Vec<i32>> = vec![vec![1, 2, 5], vec![2, 3, 5], vec![3, 4, 5]];
-    assert_eq!(sym_diff(&x), vec![1, 4, 5]);
-
-    let x: Vec<Vec<i32>> = vec![vec![1, 1, 2, 5], vec![2, 2, 3, 5], vec![3, 4, 5, 5]];
-    assert_eq!(sym_diff(&x), vec![1, 4, 5]);
+    assert_eq!(sym_diff(&vec![vec![1, 2, 5],    vec![2, 3, 5],    vec![3, 4, 5]]),    vec![1, 4, 5]);
+    assert_eq!(sym_diff(&vec![vec![1, 1, 2, 5], vec![2, 2, 3, 5], vec![3, 4, 5, 5]]), vec![1, 4, 5]);
 
     let x: Vec<Vec<i32>> = vec![vec![3, 3, 3, 2, 5], vec![2, 1, 5, 7], vec![3, 4, 6, 6], vec![1, 2, 3], vec![5, 3, 9, 8], vec![1]];
     assert_eq!(sym_diff(&x), vec![1, 2, 4, 5, 6, 7, 8, 9]);

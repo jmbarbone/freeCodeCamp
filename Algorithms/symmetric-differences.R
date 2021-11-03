@@ -1,10 +1,4 @@
 sym_diff <- function(...) {
-  n <- ...length()
-
-  if (n < 2) {
-    stop("... must have at least 2 vectors")
-  }
-
   unique(sort.int(Reduce(do_set_diff, list(...))))
 }
 

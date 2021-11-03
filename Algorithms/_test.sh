@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# simple script for testing files
+
 echo "symmetric-differences"
 echo "> R"
 rscript --vanilla symmetric-differences.R
