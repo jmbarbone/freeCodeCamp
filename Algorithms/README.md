@@ -22,3 +22,10 @@ Thus, for sets `A` and `B` above, and `C = {2, 3}`, `A △ B △ C = (A △ B) �
 
 Create a function that takes two or more arrays and returns an array of their symmetric difference.
 The returned array must contain only unique values (no duplicates).
+
+## Inventory Update
+
+Compare and update the inventory stored in a 2D array against a second 2D array of a fresh delivery.
+Update the current existing inventory item quantities (in `arr1`).
+If an item cannot be found, add the new item and quantity into the inventory array.
+The returned inventory array should be in alphabetical order by item.
