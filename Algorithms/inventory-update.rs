@@ -9,8 +9,9 @@ fn main() {
 }
 
 fn update_inventory(old: ProductList, new: ProductList) -> ProductList {
-    let inventory = check_inventory(&old, &new);
-    ProductList::from(inventory)
+    let mut inventory = ProductList::from(check_inventory(&old, &new));
+    inventory.sort();
+    inventory
 }
 
 fn check_inventory(old: &ProductList, new: &ProductList) -> ProductList {
