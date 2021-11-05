@@ -9,32 +9,49 @@ fn main() {
 }
 
 fn update_inventory(old: ProductList, new: ProductList) -> ProductList {
-    // if old.len() == 0:
-    //     return new
-    // ProductList { products: vec![(1, "Nothing")] }
-    let inventory = check_inventory(old, new);
-    ProductList::from(vec![(0, "_")])
+    let inventory = check_inventory(&old, &new);
+    ProductList::from(inventory)
 }
 
-fn check_inventory(old: ProductList, new: ProductList) -> ProductList {
-    if old.len() == 0 {
-        return new;
-    } else if new.len() == 0 {
-        return old;
-    } else {
-        // take a copy of the old product list
-        let mut inventory = old.clone();
-        let new_prod_names = new.get_names();
-        let old_prod_names = old.get_names();
-        
-        for i in 0..new.len() {
-            if old_prod_names.iter().any(|n| n.eq(&new_prod_names[i])) {
+fn check_inventory(old: &ProductList, new: &ProductList) -> ProductList {
+    let old_no_len = old.len() == 0;
+    let new_no_len = new.len() == 0;
+    let mut inventory = vec![Product{ amount: 0, name: "_".to_string() }; 0];
 
+    if old_no_len {
+        if new_no_len {
+            panic!("old or new should have length");
+        }
+        let mut inventory = &new.products;
+    } else {
+        let mut inventory = &old.products;
+    }
+
+    if !old_no_len && !new_no_len {
+        // take a copy of the old product list
+        let new_names = new.get_names();
+        let old_names = old.get_names();
+        let new_amounts = new.get_amounts();
+        // let old_amounts = old.get_amounts();
+        // grab the products vector and use that to append
+        
+        for i in 0..old.len() {
+            // old_prod_names.iter().any(|n| n.eq(&new_prod_names[i])) 
+            for j in 0..new.len() {
+                // get the Product as a tuple
+                let prod = old.products.get(i).unwrap();
+                if old_names[i].eq(&new_names[j]) {
+                    // name is found, so we have to add the values together
+                    inventory[i] = Product::from((prod.amount + new_amounts[j], old_names[i].to_string()));
+                } else {
+                    // value not found, so we can just append
+                    inventory.push(Product::from((prod.amount, prod.name.to_string())));
+                }
             }
         }
     }
 
-    old
+    ProductList::from(inventory)
 }
 
 
@@ -44,7 +61,7 @@ fn check_inventory(old: ProductList, new: ProductList) -> ProductList {
 
 #[derive(Clone, Debug)]  
 struct ProductList {
-    products: Vec<Product>
+    products: Vec<Product>,
 }
 
 impl ProductList {
@@ -97,12 +114,20 @@ impl From<Vec<(i32, &str)>> for ProductList {
     }
 }
 
+impl From<Vec<Product>> for ProductList {
+    fn from(vector: Vec<Product>) -> ProductList {
+        ProductList {
+            products: vector,
+        }
+    }
+}
+
 // Product =====================
 
 #[derive(Default, Clone, Debug)]  
 struct Product {
     amount: i32,
-    name: String
+    name: String,
 }
 
 impl Product {
@@ -112,16 +137,34 @@ impl Product {
         };
         Product {
             amount: amount,
-            name: name.to_string()
+            name: name.to_string(),
         }
     }
+
+    // fn update(self, amount: &i32) -> Self {
+    //     if amount < 0 {
+    //         panic!("amount cannot be < 0");
+    //     }
+
+    //     self.amount = self.amount + amount;
+    //     self
+    // }
 }
 
 impl From<(i32, &str)> for Product {
     fn from(tuple: (i32, &str)) -> Product {
         Product {
             amount: tuple.0,
-            name: tuple.1.to_string()
+            name: tuple.1.to_string(),
+        }
+    }
+}
+
+impl From<(i32, String)> for Product {
+    fn from(tuple: (i32, String)) -> Product {
+        Product {
+            amount: tuple.0,
+            name: tuple.1,
         }
     }
 }
@@ -153,3 +196,7 @@ impl From<Option<&Product>> for Product {
         }
     }
 }
+
+// R      92.63
+// Python  4.97
+// Rust    1.58
