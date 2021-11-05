@@ -3,9 +3,11 @@
 // This totally over engineers the problem
 
 fn main() {
-    let mut x = ProductList::from(vec![(0, "_")]);
-    x.sort();
-    println!("{:?}", x.len())
+    let old = ProductList::from(vec![(21, "Bowling Ball"), (2, "Dirty Sock"), (1, "Hair Pin"), (5, "Microphone")]);
+    let new = ProductList::from(vec![(2, "Hair Pin"), (3, "Half-Eaten Apple"), (67, "Bowling Ball"), (7, "Toothpaste")]);
+    let res = update_inventory(old, new);
+    let exp = ProductList::from(vec![(88, "Bowling Ball"), (2, "Dirty Sock"), (3, "Hair Pin"), (3, "Half-Eaten Apple"), (5, "Microphone"), (7, "Toothpaste")]);
+    assert_eq!(res.products, exp.products);
 }
 
 fn update_inventory(old: ProductList, new: ProductList) -> ProductList {
@@ -14,6 +16,7 @@ fn update_inventory(old: ProductList, new: ProductList) -> ProductList {
     inventory
 }
 
+#[allow(unused_variables, unused_mut)]
 fn check_inventory(old: &ProductList, new: &ProductList) -> ProductList {
     let old_no_len = old.len() == 0;
     let new_no_len = new.len() == 0;
@@ -60,15 +63,15 @@ fn check_inventory(old: &ProductList, new: &ProductList) -> ProductList {
 
 // ProductList ========================
 
-#[derive(Clone, Debug)]  
+#[derive(Clone, Debug, PartialEq)]  
 struct ProductList {
     products: Vec<Product>,
 }
 
 impl ProductList {
-    fn new(products: Vec<Product>) -> ProductList {
-        ProductList { products: products }
-    }
+    // fn new(products: Vec<Product>) -> ProductList {
+    //     ProductList { products: products }
+    // }
 
     fn get_names(&self) -> Vec<String> {
         let n = self.len();
@@ -125,22 +128,22 @@ impl From<Vec<Product>> for ProductList {
 
 // Product =====================
 
-#[derive(Default, Clone, Debug)]  
+#[derive(Default, Clone, Debug, PartialEq)]  
 struct Product {
     amount: i32,
     name: String,
 }
 
 impl Product {
-    fn new(amount: i32, name: String) -> Product {
-        if amount < 0 {
-            panic!("Amount cannot be < 0")
-        };
-        Product {
-            amount: amount,
-            name: name.to_string(),
-        }
-    }
+    // fn new(amount: i32, name: String) -> Product {
+    //     if amount < 0 {
+    //         panic!("Amount cannot be < 0")
+    //     };
+    //     Product {
+    //         amount: amount,
+    //         name: name.to_string(),
+    //     }
+    // }
 
     // fn update(self, amount: &i32) -> Self {
     //     if amount < 0 {
@@ -197,7 +200,3 @@ impl From<Option<&Product>> for Product {
         }
     }
 }
-
-// R      92.63
-// Python  4.97
-// Rust    1.58
