@@ -1,32 +1,57 @@
 #!/usr/bin/env bash
 
 # simple script for testing files
-# Need to loop this out
 
-echo "symmetric-differences"
-echo "> R"
-rscript --vanilla symmetric-differences.R
-echo "> python"
-python -m unittest -q symmetric-differences.py
-echo "> Rust"
-rustc symmetric-differences.rs
-cmd.exe /C "symmetric-differences"
+# Should be run in the agorithms directory. I don't have a check for that
 
-echo ".. clean up"
-rm symmetric-differences.exe
-rm symmetric-differences.pdb
+algorithms=( "symmetric-differences" "inventory-update" )
 
-echo "inventory-update"
-echo "> R"
-rscript --vanilla inventory-update.R
-echo "> python"
-python -m unittest -q inventory-update.py
+for al in "${algorithms[@]}"
+do
+    echo "== Running $al programs =========="
+    # for file in "."/$al*
+    for file in $al.*
+    do
+        if [ -f $file ] 
+        then
+            case "${file##*.}" in 
+                R )
+                    echo ""
+                    echo "-- Executing Rscript for $file ----------"
+                    Rscript --vanilla $file
+                    echo "i: no outputs from Rscript means success!"
+                    ;;
+                py )
+                    echo ""
+                    echo "-- Executing python for $file ----------"
+                    python -m unittest -q $file
+                    ;;
+                rs )
+                    echo ""
+                    echo "-- Executing rustc for $file ----------"
+                    rustc --verbose $file
+                    # remove file extension
+                    file_sans_ext="${file%.*}"
+                    windows_file=${file_sans_ext//\//\\}
+                    
+                    echo "-- Executing $windows_file ----------"
+                    cmd.exe /C "$windows_file.exe"
 
+                    echo "-- Cleaning up Rust ----------"
+                    rm $file_sans_ext.exe
+                    rm $file_sans_ext.pdb
+                    ;;
+                exe ) 
+                    rm $file
+                    ;;
+                pdb )
+                    rm $file
+                    ;;
+                * )
+                    echo "Ignoring $file"
+                    ;;
+            esac
+        fi
+    done
+done
 
-# echo "> Rust"
-# rustc inventory-update.rs
-# cmd.exe /C "inventory-update"
-#
-# echo ".. clean up"
-# rm inventory-update.exe
-# rm inventory-update.pdb
