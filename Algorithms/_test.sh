@@ -4,48 +4,34 @@
 
 # Should be run in the agorithms directory. I don't have a check for that
 
-algorithms=( "symmetric-differences" "inventory-update" )
+algorithms=( "symmetric-differences" "inventory-update" "no-repeats-please")
 
 for al in "${algorithms[@]}"
 do
+    echo ""
     echo "== Running $al programs =========="
     # for file in "."/$al*
     for file in $al.*
     do
         if [ -f $file ] 
         then
+        echo "$file"
             case "${file##*.}" in 
                 R )
-                    echo ""
-                    echo "-- Executing Rscript for $file ----------"
                     Rscript --vanilla $file
-                    echo "i: no outputs from Rscript means success!"
                     ;;
                 py )
-                    echo ""
-                    echo "-- Executing python for $file ----------"
-                    python -m unittest -q $file
+                    python -m unittest -q $file 2> .pylog
+                    if grep -q FAIL ".pylog"
+                    then
+                        echo ""
+                        head -n 50 .pylog
+                        echo ""
+                    fi
+                    rm ".pylog"
                     ;;
-                rs )
-                    echo ""
-                    echo "-- Executing rustc for $file ----------"
-                    rustc --verbose $file
-                    # remove file extension
-                    file_sans_ext="${file%.*}"
-                    windows_file=${file_sans_ext//\//\\}
-                    
-                    echo "-- Executing $windows_file ----------"
-                    cmd.exe /C "$windows_file.exe"
-
-                    echo "-- Cleaning up Rust ----------"
-                    rm $file_sans_ext.exe
-                    rm $file_sans_ext.pdb
-                    ;;
-                exe ) 
-                    rm $file
-                    ;;
-                pdb )
-                    rm $file
+                crs )
+                    cargo script $file
                     ;;
                 * )
                     echo "Ignoring $file"
