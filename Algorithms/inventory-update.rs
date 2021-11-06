@@ -3,18 +3,32 @@
 // This totally over engineers the problem
 
 fn main() {
-    let old = ProductList::from(vec![(21, "Bowling Ball"), (2, "Dirty Sock"), (1, "Hair Pin"), (5, "Microphone")]);
-    let new = ProductList::from(vec![(2, "Hair Pin"), (3, "Half-Eaten Apple"), (67, "Bowling Ball"), (7, "Toothpaste")]);
-    let res = update_inventory(old, new);
+    let inventory_a = ProductList::from(vec![(21, "Bowling Ball"), (2, "Dirty Sock"), (1, "Hair Pin"), (5, "Microphone")]);
+    let inventory_b = ProductList::from(vec![(2, "Hair Pin"), (3, "Half-Eaten Apple"), (67, "Bowling Ball"), (7, "Toothpaste")]);
+    let inventory_n = ProductList::from(vec![Product::from((0, "_")); 0]);
+    
+    let res = update_inventory(&inventory_a, &inventory_b);
     let exp = ProductList::from(vec![(88, "Bowling Ball"), (2, "Dirty Sock"), (3, "Hair Pin"), (3, "Half-Eaten Apple"), (5, "Microphone"), (7, "Toothpaste")]);
     assert_eq!(res, exp);
-}
 
-fn update_inventory(old: ProductList, new: ProductList) -> ProductList {
+    let res = update_inventory(&inventory_a, &inventory_n);
+    assert_eq!(res, inventory_a.sort());
+
+    let res = update_inventory(&inventory_n, &inventory_b);
+    assert_eq!(res, inventory_b.sort());
+
+    let old = ProductList::from(vec![(0, "Bowling Ball"), (0, "Dirty Sock"), (0, "Hair Pin"), (0, "Microphone")]);
+    let new = ProductList::from(vec![(1, "Hair Pin"), (1, "Half-Eaten Apple"), (1, "Bowling Ball"), (1, "Toothpaste")]);
+    let res = update_inventory(&old, &new);
+    let exp = ProductList::from(vec![(1, "Bowling Ball"), (0, "Dirty Sock"), (1, "Hair Pin"), (1, "Half-Eaten Apple"), (0, "Microphone"), (1, "Toothpaste")]);
+    assert_eq!(res, exp);
+}
+    
+fn update_inventory(old: &ProductList, new: &ProductList) -> ProductList {
     // let mut inventory = ProductList::from(check_inventory(&old, &new));
     let mut inventory = check_inventory(&old, &new);
     // ensure that the inventory is sorted
-    inventory.sort();
+    inventory = inventory.sort();
     inventory
 }
 
@@ -110,9 +124,9 @@ impl ProductList {
         amounts
     }
 
-    fn sort(&mut self) -> &Self {
+    fn sort(mut self) -> Self {
         self.products.sort_by_key(|p| p.name.to_lowercase());
-        self
+        ProductList::from(self)
     }
 
     fn len(&self) -> usize {
