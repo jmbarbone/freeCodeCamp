@@ -1,3 +1,7 @@
+#!/usr/bin/env run-cargo-script
+//! ```cargo
+//! [dependencies]
+//! ```
 
 fn main() {
     assert_eq!(sym_diff(&vec![vec![1, 2, 3],    vec![5, 2, 1, 4]]),    vec![3, 4, 5]);

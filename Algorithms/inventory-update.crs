@@ -1,3 +1,7 @@
+#!/usr/bin/env run-cargo-script
+//! ```cargo
+//! [dependencies]
+//! ```
 
 // This implements inventory structs because I wanted to play around with them a bit
 // This totally over engineers the problem
@@ -41,14 +45,14 @@ fn check_inventory(old: &ProductList, new: &ProductList) -> ProductList {
 
     if old_has_len {
         if !new_has_len {
-            println!("using old for inventory");
+            // println!("using old for inventory");
             return ProductList::from((old.get_amounts(), old.get_names()));
         }
 
         inventory_amounts = old.get_amounts();
         inventory_names = old.get_names();
     } else if new_has_len {
-        println!("using new for inventory");
+        // println!("using new for inventory");
         return ProductList::from((new.get_amounts(), new.get_names()));
     } else {
         panic!("bad");
@@ -66,7 +70,7 @@ fn check_inventory(old: &ProductList, new: &ProductList) -> ProductList {
                     // get the Product as a tuple
                     let prod = old.products.get(i).unwrap();
                     // add the new product amount to the old and replace the inventory element
-                    println!("UPDATING {:?}", prod);
+                    // println!("UPDATING {:?}", prod);
                     inventory_amounts[i] = prod.amount + new_amounts[j]
                 }
             }
