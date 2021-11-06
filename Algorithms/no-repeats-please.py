@@ -42,7 +42,6 @@ class testPermAlone(unittest.TestCase):
         self.assertEqual(perm_alone("a"), 1)
         self.assertEqual(perm_alone("aaab"), 0)
         self.assertEqual(perm_alone("aaabb"), 12)
-        self.assertTrue(False)
 
 
 if __name__ == "__main__" :
