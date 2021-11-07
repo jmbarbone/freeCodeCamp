@@ -4,7 +4,7 @@
 
 # Should be run in the agorithms directory. I don't have a check for that
 
-algorithms=( "symmetric-differences" "inventory-update" "no-repeats-please")
+algorithms=( "symmetric-differences" "inventory-update" "no-repeats-please" "pairwise")
 
 for al in "${algorithms[@]}"
 do
