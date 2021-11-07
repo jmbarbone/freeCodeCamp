@@ -35,8 +35,14 @@ do
                     fi
                     rm ".pylog"
                     ;;
-                crs )
+                rs )
                     cargo script $file
+                    ;;
+                exe )
+                    rm $file
+                    ;;
+                pdb )
+                    rm $file
                     ;;
                 * )
                     echo "Ignoring $file"
