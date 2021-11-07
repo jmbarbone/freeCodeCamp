@@ -9,7 +9,12 @@ algorithms=( "symmetric-differences" "inventory-update" "no-repeats-please" "pai
 for al in "${algorithms[@]}"
 do
     echo ""
-    echo "== Running $al programs =========="
+    n=$(echo -n "$al" | wc -m)
+    n=$((30 - n))
+    printf "== Running $al programs "
+    printf '=%.0s' $(seq 1 $n)
+    echo ""
+    echo ""
     # for file in "."/$al*
     for file in $al.*
     do
