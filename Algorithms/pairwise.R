@@ -1,7 +1,5 @@
 
 pairwise <- function(x, n) {
-  # x <- as.integer(x)
-  # n <- as.integer(n)
   if (!length(x)) {
     return(0L)
   }
